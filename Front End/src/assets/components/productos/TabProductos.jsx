@@ -13,39 +13,37 @@ import {
     CardBody,
     Chip,
     CardFooter,
-    Switch,
 } from "@material-tailwind/react";
 
-import { CrearVendedor } from "../modals/usuarios/CrearVendedor";
-import { EditarVededor } from "../modals/usuarios/EditarVendedor";
+
+import { EditarVededor } from "../usuarios/EditarVendedor";
 
 import Swal from 'sweetalert2'
-import { CrearCategoriaModal } from "../modals/categorias/CrearCategoriaModal";
-import { EditarCategoriaModal } from "../modals/categorias/EditarCategoriaModal";
-import { DetalleCompraModal } from "../modals/compras/DetalleComprasModal";
-import { DetalleVentaModal } from "../modals/ventas/DetallaVentasModal";
-import { RegistrarVentaModal } from "../modals/ventas/RegistrarVenta";
-
-const TABLE_HEAD = ["Id", "Nombre cliente","Apellido","Costo total", "Cantidad de productos", "Fecha", "Estado", "Detalle"];
+import { CrearCategoriaModal } from "../categorias/CrearCategoriaModal";
+import { CrearProducto } from "./CrearProductoModal";
+import { EditarProducto } from "../productos/EditarProductoModal";
+const TABLE_HEAD = ["Id", "Nombre producto","Imagen", "Categoria", "Precio","Stock","Proveedor", "Estado", ""];
 
 const TABLE_ROWS = [
     {
         id: "1",
-        nombre: "Andersson",
-        apellido: "Ramirez",
-        total: "10000000",
-        productos: "30",
-        fecha: "12/12/12",
+        nombre: "Estuche A14",
+        imagen: "/images/A14.jpg",
+        categoria: "Silicon",
+        precio: "10000",
+        stock: "10",
+        proveedor:"Prov 1",
         online: true,
 
     },
     {
         id: "1",
-        nombre: "Andersson",
-        apellido: "Ramirez",
-        total: "1000",
-        productos: "1",
-        fecha: "12/12/12",
+        nombre: "B-10",
+        imagen: "/images/batri-b10.jpg",
+        categoria: "Silicon",
+        precio: "10000",
+        stock: "1010",
+        proveedor:"Prov 2",
         online: true,
     },
 
@@ -69,7 +67,7 @@ const handleClick = async () => {
         );
     }
 };
-export function TabVentas() {
+export function TabProductos() {
 
     return (
         <Card className="h-full w-full max-w-[75%] absolute right-5 mt-2 mb-2 z-0 bg-transparent">
@@ -80,13 +78,12 @@ export function TabVentas() {
                 </div>
                 <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
 
-                    <RegistrarVentaModal />
+                    <CrearProducto />
 
                     <Button className="flex" color="green">
-              <DocumentArrowDownIcon className="h-5 w-5" />
-              <span className="px-2	">           Excel</span>
-            </Button>
-  
+                        <DocumentArrowDownIcon className="h-5 w-5" />
+                        <span className="px-2	">           Excel</span>
+                    </Button>
 
 
                     <div className="w-full md:w-72">
@@ -120,7 +117,7 @@ export function TabVentas() {
                     </thead>
                     <tbody>
                         {TABLE_ROWS.map(
-                            ({ id,nombre,apellido, productos,total, fecha, online }, index) => {
+                            ({ id, nombre, imagen,categoria,precio,stock,proveedor, online }, index) => {
                                 const isLast = index === TABLE_ROWS.length - 1;
                                 const classes = isLast
                                     ? "p-4"
@@ -152,25 +149,8 @@ export function TabVentas() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {apellido}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {productos}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {total}
+                                            <img src={imagen} className="w-16 h-16"></img>
+                                                
                                             </Typography>
                                         </td>
 
@@ -181,7 +161,37 @@ export function TabVentas() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {fecha}
+                                                {categoria}
+                                            </Typography>
+                                        </td>
+
+                                        <td className={classes}>
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {precio}
+                                            </Typography>
+                                        </td>
+
+                                        <td className={classes}>
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {stock}
+                                            </Typography>
+                                        </td>
+
+                                        <td className={classes}>
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {proveedor}
                                             </Typography>
                                         </td>
 
@@ -199,8 +209,8 @@ export function TabVentas() {
                                         <td className={classes}>
                                             <div className="flex">
 
-                                            <Switch />
-                                            <DetalleVentaModal />
+                                                <EditarProducto />
+                                                <Button color="red" onClick={handleClick}><TrashIcon className="h-5 w-5"></TrashIcon> </Button>
 
 
                                             </div>

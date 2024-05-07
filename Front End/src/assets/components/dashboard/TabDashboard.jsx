@@ -15,9 +15,9 @@ import {
     CardFooter,
   } from "@material-tailwind/react";
   
-  import { CrearRolModal } from "../modals/roles/CrearRolModal";
-  import { EditarRolModal } from "../modals/roles/EditarRolModal";
-  import { PermisosRolModal } from "../modals/roles/PermisosModal";
+  import { CrearRolModal } from "../roles/CrearRolModal";
+  import { EditarRolModal } from "../roles/EditarRolModal";
+  import { PermisosRolModal } from "../roles/PermisosModal";
   import Swal from 'sweetalert2'
   const TABLE_HEAD = ["Id", "Nombre", "Descripción", "Estado", "", ""];
   

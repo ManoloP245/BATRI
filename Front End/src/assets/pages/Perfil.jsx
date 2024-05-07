@@ -13,7 +13,7 @@ import
 {ArrowLongLeftIcon,
 
 } from "@heroicons/react/24/solid";
-import { InfoPerfil } from '../components/modals/usuarios/Usuario';
+import { InfoPerfil } from '../components/usuarios/Usuario';
 const Perfil = () => {
   return (
    <> 

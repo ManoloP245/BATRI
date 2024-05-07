@@ -17,31 +17,31 @@ import {
 
 
 import Swal from 'sweetalert2'
-import { CrearClienteModal } from "../modals/clientes/CrearClienteModal";
-import { EditarClienteModal } from "../modals/clientes/EditarClienteModal";
-import { DetalleCompraModal } from "../modals/compras/DetalleComprasModal";
 
-const TABLE_HEAD = ["Id", "Nombres","Apellidos", "Telefono", "Correo", "Rol", "Estado","Acciones"];
+
+import { DetallePedidosModal } from "../pedidos/DetallePedidosModal";
+
+const TABLE_HEAD = ["Id", "Nombres","Apellidos", "Cantidad", "Total", "Fecha", "Estado","Detalle","Acciones"];
 
 const TABLE_ROWS = [
     {
         id: "1",
         nombre: "Andres",
         apellidos: "Ramirez",
-        telefono: "317865456",
-        correo: "andresramirez@gmail.com",
-        rol: "Cliente",
+        cantidad: "12",
+        correo: "500000",
+        fecha: "12/12/2023",
         estado: "Activo"
 
     },
     {
         id: "2",
-        nombre: "Sebastian",
-        apellidos: "Horta",
-        telefono: "319865456",
-        correo: "sebastainhorta@gmail.com",
-        rol: "Cliente",
-        estado: "Inactivo"
+        nombre: "Andersson",
+        apellidos: "Ramirez",
+        cantidad: "12",
+        correo: "400000",
+        fecha: "12/10/2023",
+        estado: "Activo"
     },
 
 ];
@@ -64,7 +64,7 @@ const handleClick = async () => {
         );
     }
 };
-export function TabClientes() {
+export function TabPedidos() {
 
     return (
         <Card className="h-full w-full max-w-[75%] absolute right-5 mt-2 mb-2 z-0 bg-transparent">
@@ -75,12 +75,12 @@ export function TabClientes() {
                 </div>
                 <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
 
-                    <CrearClienteModal />
 
-                    <Button className="flex" color="green">
-                        <DocumentArrowDownIcon className="h-5 w-5" />
-                        <span className="px-2	">           Excel</span>
-                    </Button>
+                <Button className="flex" color="green">
+              <DocumentArrowDownIcon className="h-5 w-5" />
+              <span className="px-2	">           Excel</span>
+            </Button>
+  
 
 
                     <div className="w-full md:w-72">
@@ -114,7 +114,7 @@ export function TabClientes() {
                     </thead>
                     <tbody>
                         {TABLE_ROWS.map(
-                            ({ id, nombre,apellidos, telefono, correo,rol,estado }, index) => {
+                            ({ id, nombre,apellidos, cantidad, correo,fecha,estado }, index) => {
                                 const isLast = index === TABLE_ROWS.length - 1;
                                 const classes = isLast
                                     ? "p-4"
@@ -157,7 +157,7 @@ export function TabClientes() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {telefono}
+                                                {cantidad}
                                             </Typography>
                                         </td>
 
@@ -177,7 +177,7 @@ export function TabClientes() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {rol}
+                                                {fecha}
                                             </Typography>
                                         </td>                                       
 
@@ -194,7 +194,7 @@ export function TabClientes() {
 
                                         <td className={classes}>
                                             <div className="flex">
-                                                <EditarClienteModal />
+                                                <DetallePedidosModal />
                                                 <Button color="red" onClick={handleClick}><TrashIcon className="h-5 w-5"></TrashIcon> </Button>
 
 

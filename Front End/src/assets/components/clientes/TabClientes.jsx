@@ -11,37 +11,37 @@ import {
     Typography,
     Button,
     CardBody,
-    Switch,
     Chip,
     CardFooter,
 } from "@material-tailwind/react";
 
-import { CrearVendedor } from "../modals/usuarios/CrearVendedor";
-import { EditarVededor } from "../modals/usuarios/EditarVendedor";
 
 import Swal from 'sweetalert2'
-import { CrearCategoriaModal } from "../modals/categorias/CrearCategoriaModal";
-import { EditarCategoriaModal } from "../modals/categorias/EditarCategoriaModal";
-import { DetalleCompraModal } from "../modals/compras/DetalleComprasModal";
-import { RegistrarCompraModal } from "../modals/compras/RegistrarCompra";
+import { CrearClienteModal } from "./CrearClienteModal";
+import { EditarClienteModal } from "./EditarClienteModal";
+import { DetalleCompraModal } from "../compras/DetalleComprasModal";
 
-const TABLE_HEAD = ["Id", "Costo total", "Cantidad de productos", "Fecha", "Estado", "Detalle"];
+const TABLE_HEAD = ["Id", "Nombres","Apellidos", "Telefono", "Correo", "Rol", "Estado","Acciones"];
 
 const TABLE_ROWS = [
     {
         id: "1",
-        total: "10000000",
-        productos: "30",
-        fecha: "12/12/12",
-        online: true,
+        nombre: "Andres",
+        apellidos: "Ramirez",
+        telefono: "317865456",
+        correo: "andresramirez@gmail.com",
+        rol: "Cliente",
+        estado: "Activo"
 
     },
     {
-        id: "1",
-        total: "1000",
-        productos: "1",
-        fecha: "12/12/12",
-        online: true,
+        id: "2",
+        nombre: "Sebastian",
+        apellidos: "Horta",
+        telefono: "319865456",
+        correo: "sebastainhorta@gmail.com",
+        rol: "Cliente",
+        estado: "Inactivo"
     },
 
 ];
@@ -64,7 +64,7 @@ const handleClick = async () => {
         );
     }
 };
-export function TabCompras() {
+export function TabClientes() {
 
     return (
         <Card className="h-full w-full max-w-[75%] absolute right-5 mt-2 mb-2 z-0 bg-transparent">
@@ -75,10 +75,10 @@ export function TabCompras() {
                 </div>
                 <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
 
-                    <RegistrarCompraModal />
+                    <CrearClienteModal />
 
-                    <Button className="flex"color="green">
-                        <DocumentArrowDownIcon className="h-5 w-5"  />
+                    <Button className="flex" color="green">
+                        <DocumentArrowDownIcon className="h-5 w-5" />
                         <span className="px-2	">           Excel</span>
                     </Button>
 
@@ -114,7 +114,7 @@ export function TabCompras() {
                     </thead>
                     <tbody>
                         {TABLE_ROWS.map(
-                            ({ id, productos,total, fecha, online }, index) => {
+                            ({ id, nombre,apellidos, telefono, correo,rol,estado }, index) => {
                                 const isLast = index === TABLE_ROWS.length - 1;
                                 const classes = isLast
                                     ? "p-4"
@@ -137,7 +137,7 @@ export function TabCompras() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {productos}
+                                                {nombre}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -146,7 +146,7 @@ export function TabCompras() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {total}
+                                                {apellidos}
                                             </Typography>
                                         </td>
 
@@ -157,28 +157,46 @@ export function TabCompras() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {fecha}
+                                                {telefono}
                                             </Typography>
                                         </td>
+
+                                        <td className={classes}>
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {correo}
+                                            </Typography>
+                                        </td>
+
+                                        <td className={classes}>
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {rol}
+                                            </Typography>
+                                        </td>                                       
 
                                         <td className={classes}>
                                             <div className="w-max">
                                                 <Chip
                                                     variant="ghost"
                                                     size="sm"
-                                                    value={online ? "Activo" : "Inactivo"}
-                                                    color={online ? "green" : "blue-gray"}
+                                                    value={estado ? "Activo" : "Inactivo"}
+                                                    color={estado ? "green" : "blue-gray"}
                                                 />
                                             </div>
                                         </td>
 
                                         <td className={classes}>
                                             <div className="flex">
+                                                <EditarClienteModal />
+                                                <Button color="red" onClick={handleClick}><TrashIcon className="h-5 w-5"></TrashIcon> </Button>
 
-                                          
-                                            <Switch color="green" />
-
-  <DetalleCompraModal />
 
                                             </div>
                                         </td>

@@ -15,8 +15,8 @@ import {
     CardFooter,
   } from "@material-tailwind/react";
   
-  import { CrearProveedor } from "../modals/proveedores/CrearProveedorModal";
-import { EditarProveedor } from "../modals/proveedores/EditarProveedorModal";
+  import { CrearProveedor } from "../proveedores/CrearProveedorModal";
+import { EditarProveedor } from "../proveedores/EditarProveedorModal";
 
   import Swal from 'sweetalert2'
 

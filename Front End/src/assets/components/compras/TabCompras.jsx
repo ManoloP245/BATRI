@@ -11,37 +11,37 @@ import {
     Typography,
     Button,
     CardBody,
+    Switch,
     Chip,
     CardFooter,
 } from "@material-tailwind/react";
 
+import { CrearVendedor } from "../usuarios/CrearVendedor";
+import { EditarVededor } from "../usuarios/EditarVendedor";
 
 import Swal from 'sweetalert2'
+import { CrearCategoriaModal } from "../categorias/CrearCategoriaModal";
+import { EditarCategoriaModal } from "../categorias/EditarCategoriaModal";
+import { DetalleCompraModal } from "../compras/DetalleComprasModal";
+import { RegistrarCompraModal } from "../compras/RegistrarCompra";
 
-
-import { DetallePedidosModal } from "../modals/pedidos/DetallePedidosModal";
-
-const TABLE_HEAD = ["Id", "Nombres","Apellidos", "Cantidad", "Total", "Fecha", "Estado","Detalle","Acciones"];
+const TABLE_HEAD = ["Id", "Costo total", "Cantidad de productos", "Fecha", "Estado", "Detalle"];
 
 const TABLE_ROWS = [
     {
         id: "1",
-        nombre: "Andres",
-        apellidos: "Ramirez",
-        cantidad: "12",
-        correo: "500000",
-        fecha: "12/12/2023",
-        estado: "Activo"
+        total: "10000000",
+        productos: "30",
+        fecha: "12/12/12",
+        online: true,
 
     },
     {
-        id: "2",
-        nombre: "Andersson",
-        apellidos: "Ramirez",
-        cantidad: "12",
-        correo: "400000",
-        fecha: "12/10/2023",
-        estado: "Activo"
+        id: "1",
+        total: "1000",
+        productos: "1",
+        fecha: "12/12/12",
+        online: true,
     },
 
 ];
@@ -64,7 +64,7 @@ const handleClick = async () => {
         );
     }
 };
-export function TabPedidos() {
+export function TabCompras() {
 
     return (
         <Card className="h-full w-full max-w-[75%] absolute right-5 mt-2 mb-2 z-0 bg-transparent">
@@ -75,12 +75,12 @@ export function TabPedidos() {
                 </div>
                 <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
 
+                    <RegistrarCompraModal />
 
-                <Button className="flex" color="green">
-              <DocumentArrowDownIcon className="h-5 w-5" />
-              <span className="px-2	">           Excel</span>
-            </Button>
-  
+                    <Button className="flex"color="green">
+                        <DocumentArrowDownIcon className="h-5 w-5"  />
+                        <span className="px-2	">           Excel</span>
+                    </Button>
 
 
                     <div className="w-full md:w-72">
@@ -114,7 +114,7 @@ export function TabPedidos() {
                     </thead>
                     <tbody>
                         {TABLE_ROWS.map(
-                            ({ id, nombre,apellidos, cantidad, correo,fecha,estado }, index) => {
+                            ({ id, productos,total, fecha, online }, index) => {
                                 const isLast = index === TABLE_ROWS.length - 1;
                                 const classes = isLast
                                     ? "p-4"
@@ -137,7 +137,7 @@ export function TabPedidos() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {nombre}
+                                                {productos}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -146,30 +146,10 @@ export function TabPedidos() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {apellidos}
+                                                {total}
                                             </Typography>
                                         </td>
 
-
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {cantidad}
-                                            </Typography>
-                                        </td>
-
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {correo}
-                                            </Typography>
-                                        </td>
 
                                         <td className={classes}>
                                             <Typography
@@ -179,24 +159,26 @@ export function TabPedidos() {
                                             >
                                                 {fecha}
                                             </Typography>
-                                        </td>                                       
+                                        </td>
 
                                         <td className={classes}>
                                             <div className="w-max">
                                                 <Chip
                                                     variant="ghost"
                                                     size="sm"
-                                                    value={estado ? "Activo" : "Inactivo"}
-                                                    color={estado ? "green" : "blue-gray"}
+                                                    value={online ? "Activo" : "Inactivo"}
+                                                    color={online ? "green" : "blue-gray"}
                                                 />
                                             </div>
                                         </td>
 
                                         <td className={classes}>
                                             <div className="flex">
-                                                <DetallePedidosModal />
-                                                <Button color="red" onClick={handleClick}><TrashIcon className="h-5 w-5"></TrashIcon> </Button>
 
+                                          
+                                            <Switch color="green" />
+
+  <DetalleCompraModal />
 
                                             </div>
                                         </td>

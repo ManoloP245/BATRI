@@ -8,7 +8,7 @@ import {
   IconButton,
   Card,
 } from "@material-tailwind/react";
-import { Registro } from "./modals/usuarios/RegistroModal";
+import { Registro } from "./usuarios/RegistroModal";
 import { Input } from "postcss";
  
 export function NavUser() {
