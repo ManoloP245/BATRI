@@ -1,7 +1,7 @@
 from flask import jsonify,request
 from modelos.categorias import Categorias
 from conexiondb.database import db_session
-
+from datetime import datetime
 def rutas_categorias(app):
 
     @app.route('/consultar_categorias')
@@ -15,6 +15,7 @@ def rutas_categorias(app):
                     "nombre":categoria.nombre,
                     "descripcion":categoria.descripcion,
                     "estado":categoria.estado,
+                    "fecha_categoria":categoria.fecha_categoria.strftime('%d/%m/%Y'),
                 }
                 categorias.append(datos_categoria)
             json_data = jsonify(categorias)    
@@ -37,14 +38,20 @@ def rutas_categorias(app):
         except:    
             return jsonify({"msg": "No se encontro categoria","estado":False})
         
+        
     @app.route("/crear_categoria",methods=["POST"])    
     def crear_categoria():
         datos = request.json
         nombre = datos.get('nombre')
         descripcion = datos.get('descripcion')
         estado = datos.get('estado')
+        fecha_categoria = datetime.now()
+        
+    # Aquí debes agregar el código para guardar 'nueva_categoria' en tu base de datos
+
+        
         try:
-            crear= Categorias(nombre, descripcion,estado)
+            crear= Categorias(nombre, descripcion,estado,fecha_categoria)
             db_session.add(crear)
             db_session.commit()
             return jsonify({"msg": "Exito al crear el categoria","estado":True}) 
@@ -70,15 +77,4 @@ def rutas_categorias(app):
         except Exception as e:    
             return jsonify({"msg": f"No se pudo actualizar el categoria: {str(e)}", "estado": False})
         
-    @app.route("/eliminar_categoria/<int:id_categoria>",methods=["DELETE"]) 
-    def eliminar_categoria(id_categoria):
-        try:
-            categoria = Categorias.query.get(id_categoria)
-            if categoria:
-                db_session.delete(categoria)
-                db_session.commit()
-                return jsonify({"msg": "categoria eliminado exitosamente", "estado": True})
-            else:
-                return jsonify({"msg": "No se encontró el categoria", "estado": False})
-        except Exception as e:
-            return jsonify({"msg": f"No se pudo eliminar el categoria: {str(e)}", "estado": False})
+    

@@ -16,8 +16,8 @@ import {
   CardFooter,
 } from "@material-tailwind/react";
 
-import { CrearVendedor } from "../modals/usuarios/CrearVendedor";
-import { EditarVededor } from "../modals/usuarios/EditarVendedor";
+import { CrearVendedor } from "../usuarios/CrearVendedor";
+import { EditarVededor } from "../usuarios/EditarVendedor";
 
 import Swal from "sweetalert2";
 
@@ -34,7 +34,7 @@ const TABLE_HEAD = [
 ];
 
 export function TabUsuarios() {
-  const [usuarios, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
   const [online, setOnline] = useState(true);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export function TabUsuarios() {
   }, []);
 
   function getUsers() {
-    axios.get("http://127.0.0.1:5000/consultar_usuarios")
+    axios.get("http://127.0.0.1:5000/listusers")
       .then(function (response) {
         console.log(response.data);
         setUsers(response.data);
@@ -114,7 +114,7 @@ export function TabUsuarios() {
             </tr>
           </thead>
           <tbody>
-            {usuarios.map((usuario, key) => (
+            {users.map((user, key) => (
 
               <tr key={key}>
                 <td className="p-4 border-b border-blue-gray-50">
@@ -123,7 +123,7 @@ export function TabUsuarios() {
                   color="blue-gray"
                   className="font-normal"
                 >
-                  {usuario.id_usuario || ''} {/* Id_usuario */}
+                  {user[0] || ''} {/* Id_usuario */}
                 </Typography>
                 </td>
                 <td className="p-4 border-b border-blue-gray-50">
@@ -132,7 +132,7 @@ export function TabUsuarios() {
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {usuario.nombre || ''}
+                    {user[1] || ''}
                  
                   </Typography>
                 </td>
@@ -142,9 +142,8 @@ export function TabUsuarios() {
                     color="blue-gray"
                     className="font-normal"
                   >
-
-                    {usuario.apellido || ''}
-
+                    
+                    {user[2] || ''}
                   </Typography>
                 </td>
                 <td className="p-4 border-b border-blue-gray-50">
@@ -153,7 +152,7 @@ export function TabUsuarios() {
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {usuario.cedula || ''}
+                    {user[3] || ''}
                   </Typography>
                 </td>
                 <td className="p-4 border-b border-blue-gray-50">
@@ -162,7 +161,7 @@ export function TabUsuarios() {
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {usuario.correo || ''}
+                    {user[4] || ''}
                   </Typography>
                 </td>
                 <td className="p-4 border-b border-blue-gray-50">
@@ -171,7 +170,7 @@ export function TabUsuarios() {
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {usuario.id_rol || ''}
+                    {user[5] || ''}
                   </Typography>
                 </td>
                 <td className="p-4 border-b border-blue-gray-50">
@@ -180,7 +179,7 @@ export function TabUsuarios() {
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {usuario[6] || ''}
+                    {user[6] || ''}
                   </Typography>
                 </td>
 
@@ -189,15 +188,15 @@ export function TabUsuarios() {
                   <Chip
                       variant="ghost"
                       size="sm"
-                      value={usuario.estado === 1 ? "Activo" : "Inactivo"}
-                      color={usuario.estado === 1 ? "green" : "blue-gray"}
+                      value={user[7] === 1 ? "Activo" : "Inactivo"}
+                      color={user[7] === 1 ? "green" : "blue-gray"}
                   />
                   </div>
                 </td>
 
                 <td className="p-4 border-b border-blue-gray-50">
                   <div className="flex">
-                  <EditarVededor user={usuario} />
+                  <EditarVededor user={user} />
                     <Button color="red" onClick={handleClick}>
                       <TrashIcon className="h-5 w-5"></TrashIcon>{" "}
                     </Button>

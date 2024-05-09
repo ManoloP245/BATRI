@@ -17,8 +17,8 @@ import {
 
 
 import Swal from 'sweetalert2'
-import { CrearClienteModal } from "./CrearClienteModal";
-import { EditarClienteModal } from "./EditarClienteModal";
+import { CrearClienteModal } from "../clientes/CrearClienteModal";
+import { EditarClienteModal } from "../clientes/EditarClienteModal";
 import { DetalleCompraModal } from "../compras/DetalleComprasModal";
 
 const TABLE_HEAD = ["Id", "Nombres","Apellidos", "Telefono", "Correo", "Rol", "Estado","Acciones"];

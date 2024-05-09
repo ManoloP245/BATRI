@@ -23,8 +23,8 @@ import Swal from 'sweetalert2'
 import { CrearCategoriaModal } from "../categorias/CrearCategoriaModal";
 import { EditarCategoriaModal } from "../categorias/EditarCategoriaModal";
 import { DetalleCompraModal } from "../compras/DetalleComprasModal";
-import { DetalleVentaModal } from "./DetallaVentasModal";
-import { RegistrarVentaModal } from "./RegistrarVenta";
+import { DetalleVentaModal } from "../ventas/DetallaVentasModal";
+import { RegistrarVentaModal } from "../ventas/RegistrarVenta";
 
 const TABLE_HEAD = ["Id", "Nombre cliente","Apellido","Costo total", "Cantidad de productos", "Fecha", "Estado", "Detalle"];
 

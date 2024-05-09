@@ -20,7 +20,7 @@ import { EditarVededor } from "../usuarios/EditarVendedor";
 
 import Swal from 'sweetalert2'
 import { CrearCategoriaModal } from "../categorias/CrearCategoriaModal";
-import { CrearProducto } from "./CrearProductoModal";
+import { CrearProducto } from "../productos/CrearProductoModal";
 import { EditarProducto } from "../productos/EditarProductoModal";
 const TABLE_HEAD = ["Id", "Nombre producto","Imagen", "Categoria", "Precio","Stock","Proveedor", "Estado", ""];
 
