@@ -14,33 +14,20 @@ import {
     Chip,
     CardFooter,
 } from "@material-tailwind/react";
-
-import { CrearVendedor } from "../usuarios/CrearVendedor";
-import { EditarVededor } from "../usuarios/EditarVendedor";
-
 import Swal from 'sweetalert2'
-import { CrearCategoriaModal } from "./CrearCategoriaModal";
-import { EditarCategoriaModal } from "./EditarCategoriaModal";
+import { CrearCategoriaModal } from "../categorias/CrearCategoriaModal";
+import { EditarCategoriaModal } from "../categorias/EditarCategoriaModal";
+
+import React, { Suspense } from "react";
+import { useFetch } from "../servicios/UseFetch";
+import { fetchData } from "../servicios/fetchData";
+
+
+const apiData = fetchData("http://127.0.0.1:5000/consultar_categorias");
+
+
 const TABLE_HEAD = ["Id", "Nombre categoria", "Descripción", "Fecha", "Estado", ""];
 
-const TABLE_ROWS = [
-    {
-        id: "1",
-        nombre: "Estuche",
-        descripcion: "Estuches en silicona",
-        fecha: "12/12/12",
-        online: true,
-
-    },
-    {
-        id: "1",
-        nombre: "Cables USB-C",
-        descripcion: "Cables con entrada USB y C",
-        fecha: "12/12/12",
-        online: true,
-    },
-
-];
 const handleClick = async () => {
     const result = await Swal.fire({
         title: '¿Estás seguro?',
@@ -61,16 +48,11 @@ const handleClick = async () => {
     }
 };
 export function TabCategorias() {
-
+    const data = apiData.read();
     return (
         <Card className="h-full w-full max-w-[75%] absolute right-5 mt-2 mb-2 z-0 bg-transparent">
-            <CardHeader floated={false} shadow={false} className="rounded-none py-2">
-                <div className="mb-8 flex items-center justify-between gap-8 ">
-
-
-                </div>
-                <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-
+            <CardHeader floated={false} shadow={false} className="rounded-none py-8">
+                <div className="flex flex-col items-center justify-between gap-4 md:flex-row mb-4">
                     <CrearCategoriaModal />
 
                     <Button className="flex" color="green">
@@ -109,78 +91,73 @@ export function TabCategorias() {
                         </tr>
                     </thead>
                     <tbody>
-                        {TABLE_ROWS.map(
-                            ({ id, nombre, descripcion, fecha, online }, index) => {
-                                const isLast = index === TABLE_ROWS.length - 1;
-                                const classes = isLast
-                                    ? "p-4"
-                                    : "p-4 border-b border-blue-gray-50";
+                    <Suspense fallback={<div>Cargando</div>}>
+                        {data.map(({ id_categoria, nombre, descripcion, fecha_categoria, estado }, index) => {
+                            const isLast = index === data.length - 1;
+                            const classes = isLast ? "p-4" : "p-2 border-b border-blue-gray-50";
 
-                                return (
-                                    <tr key={id}>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {id}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {nombre}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {descripcion}
-                                            </Typography>
-                                        </td>
-
-
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {fecha}
-                                            </Typography>
-                                        </td>
-
-                                        <td className={classes}>
-                                            <div className="w-max">
-                                                <Chip
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    value={online ? "Activo" : "Inactivo"}
-                                                    color={online ? "green" : "blue-gray"}
-                                                />
-                                            </div>
-                                        </td>
-
-                                        <td className={classes}>
-                                            <div className="flex">
-
-                                                <EditarCategoriaModal />
-                                                <Button color="red" onClick={handleClick}><TrashIcon className="h-5 w-5"></TrashIcon> </Button>
+                            return (
+                                <tr key={id_categoria}>
+                                    <td className={classes}>
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {id_categoria}
+                                        </Typography>
+                                    </td>
+                                    <td className={classes}>
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {nombre}
+                                        </Typography>
+                                    </td>
+                                    <td className={classes}>
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {descripcion}
+                                        </Typography>
+                                    </td>
+                                    <td className={classes}>
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {fecha_categoria}
+                                        </Typography>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="w-max">
+                                            <Chip
+                                                variant="ghost"
+                                                size="sm"
+                                                value={estado ? "Activo" : "Inactivo"}
+                                                color={estado ? "green" : "blue-gray"}
+                                            />
+                                        </div>
+                                    </td>
+                                    <td className="p-6">
+                                        <div className="flex">
+                                            <EditarCategoriaModal />
 
 
-                                            </div>
-                                        </td>
-                                    </tr>
-                                );
-                            },
-                        )}
+                                            <Button color="red" onClick={handleClick} className="p-3 m-1">
+                                                <TrashIcon className="h-5 w-5" />
+                                            </Button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                        </Suspense>
                     </tbody>
                 </table>
             </CardBody>

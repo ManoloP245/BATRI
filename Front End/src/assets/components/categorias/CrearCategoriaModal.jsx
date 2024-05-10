@@ -2,42 +2,53 @@ import React from "react";
 import {
   Button,
   Dialog,
-  DialogHeader,
   DialogBody,
-  DialogFooter,
 } from "@material-tailwind/react";
 import { UserPlusIcon } from "@heroicons/react/24/solid";
 
-import {enviarDatosCategorias} from '../servicios/crear'
+import { enviarDatosCategorias } from '../servicios/crear'
+import Swal from 'sweetalert2';
 
-const manejarEnvio = (event) => {
+const manejarEnvio = (event, setOpen) => {
   event.preventDefault();
- 
+
   const datos = {
     nombre: event.target.elements.nombreCategoria.value,
     descripcion: event.target.elements.descripcionCategoria.value,
     estado: event.target.elements.estadoCategoria.value,
   };
- console.log(datos)
-  enviarDatosCategorias(datos);
+
+  if (!datos.nombre || !datos.descripcion || !datos.estado) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Oops...',
+      text: 'Todos los campos deben estar llenos!',
+      position: 'top', 
+    });
+  } else {
+    console.log(datos);
+    enviarDatosCategorias(datos);
+    Swal.fire(
+      'Enviado!',
+      'Tus datos han sido enviados.',
+      'success'
+    );
+    setOpen(false); // Cierra el modal solo si se envían los datos correctamente
+  }
 };
 
 
 export function CrearCategoriaModal() {
   const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => setOpen(!open);
-
   return (
     <>
-
-      <Button color="green" onClick={handleOpen} variant="gradient" className="flex"><UserPlusIcon strokeWidth={2} className="h-4 w-4" />
-        <span className="px-2">   Crear nueva categoria </span>
-
+ <Button color="green" onClick={() => setOpen(true)} variant="gradient" className="flex">
+        <UserPlusIcon strokeWidth={2} className="h-4 w-4" />
+        <span className="px-2">Crear nueva categoria</span>
       </Button>
       <Dialog
         open={open}
-        handler={handleOpen}
+        handler={() => setOpen(!open)}
         animate={{
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
@@ -49,7 +60,7 @@ export function CrearCategoriaModal() {
               Registrar categoria
             </h4>
 
-            <form class="max-w-screen-lg mt-8 mb-2 w-80 sm:w-96" onSubmit={manejarEnvio}>
+            <form className="max-w-screen-lg mt-8 mb-2 w-80 sm:w-96" onSubmit={(event) => manejarEnvio(event, setOpen)}>
               <div class="flex flex-col gap-6 mb-1">
                 <h6
                   class="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
@@ -67,7 +78,7 @@ export function CrearCategoriaModal() {
                   Descripción de la categoria
                 </h6>
                 <div class="relative h-11 w-full min-w-[200px]">
-                  <input placeholder="Esta categoria hace..." required name="descripcionCategoria" 
+                  <input placeholder="Esta categoria hace..." required  name="descripcionCategoria" 
                     class="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent !border-t-blue-gray-200 bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:!border-t-gray-900 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50" />
                   
                   <label
@@ -77,17 +88,16 @@ export function CrearCategoriaModal() {
                   class="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
                   Estado
                 </h6>
-                <select name="estadoCategoria" id="estadoCategoria" class="border border-gray-300 rounded px-5 py-2 text-sm focus:">
-  <option value="1">Activo</option>
-  <option value="2">Inactivo</option>
-</select>
+                <select name="estadoCategoria" id="estadoCategoria" required class="border border-gray-300 rounded px-5 py-2 text-sm focus:">
+              <option value="1">Activo</option>
+              <option value="2">Inactivo</option>
+            </select>
               
-              
-              
+            
               </div>
               <div class="inline-flex items-center">
               </div>
-              <button
+              <button 
                 class="mt-6 block w-full select-none rounded-lg bg-green-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 type="submit">
                 Guardar categoria  

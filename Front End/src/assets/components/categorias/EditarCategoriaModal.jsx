@@ -19,11 +19,10 @@ export function EditarCategoriaModal({ id_categoria }) {
   return (
     <>
 
-<Button onClick={handleOpen} variant="gradient" className="flex mx-2" color="blue">
+<Button color="blue" onClick={handleOpen} className="p-3 m-1">
       <PencilSquareIcon strokeWidth={2} className="h-4 w-4" /> 
-    
-    
-      </Button>
+</Button>
+
       <Dialog
         open={open}
         handler={handleOpen}
