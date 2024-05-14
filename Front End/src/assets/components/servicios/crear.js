@@ -1,12 +1,12 @@
 // api.js
-export const enviarDatosCategorias = async (datos) => {
+export const enviarDatos = async (url,data) => {
   try {
-    const respuesta = await fetch('http://127.0.0.1:5000/crear_categoria', {
+    const respuesta = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(datos)
+      body: JSON.stringify(data)
     });
 
     if (!respuesta.ok) {

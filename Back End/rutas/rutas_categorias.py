@@ -61,20 +61,20 @@ def rutas_categorias(app):
     @app.route("/actualizar_categoria/<int:id_categoria>",methods=["PUT"]) 
     def actualizar_categoria(id_categoria):
         datos = request.json
-        nombre = datos.get('nombre')
-        descripcion = datos.get('descripcion')
-        estado = datos.get('estado')
         try:
             categoria = Categorias.query.filter_by(id_categoria=id_categoria).first()
             if categoria:
-                categoria.nombre = nombre
-                categoria.descripcion = descripcion
-                categoria.estado = estado
+                if 'nombre' in datos:
+                    categoria.nombre = datos['nombre']
+                if 'descripcion' in datos:
+                    categoria.descripcion = datos['descripcion']
+                if 'estado' in datos:
+                    categoria.estado = datos['estado']
                 db_session.commit()
                 return jsonify({"msg": "Éxito al actualizar el categoria", "estado": True})
             else:
                 return jsonify({"msg": "No se encontró el categoria", "estado": False})
         except Exception as e:    
             return jsonify({"msg": f"No se pudo actualizar el categoria: {str(e)}", "estado": False})
-        
+
     

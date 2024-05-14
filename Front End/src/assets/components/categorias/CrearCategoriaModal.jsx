@@ -1,45 +1,54 @@
-import React from "react";
-import {
-  Button,
-  Dialog,
-  DialogBody,
-} from "@material-tailwind/react";
-import { UserPlusIcon } from "@heroicons/react/24/solid";
 
-import { enviarDatosCategorias } from '../servicios/crear'
+import { Button, Dialog, DialogBody } from "@material-tailwind/react";
+import { UserPlusIcon } from "@heroicons/react/24/solid";
 import Swal from 'sweetalert2';
 
-const manejarEnvio = (event, setOpen) => {
-  event.preventDefault();
-
-  const datos = {
-    nombre: event.target.elements.nombreCategoria.value,
-    descripcion: event.target.elements.descripcionCategoria.value,
-    estado: event.target.elements.estadoCategoria.value,
-  };
-
-  if (!datos.nombre || !datos.descripcion || !datos.estado) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Oops...',
-      text: 'Todos los campos deben estar llenos!',
-      position: 'top', 
-    });
-  } else {
-    console.log(datos);
-    enviarDatosCategorias(datos);
-    Swal.fire(
-      'Enviado!',
-      'Tus datos han sido enviados.',
-      'success'
-    );
-    setOpen(false); // Cierra el modal solo si se envían los datos correctamente
-  }
-};
+import { categoriaSchema } from "./CategoriasValidaciones";
+import { enviarDatos } from "../servicios/crear";
+import React, { useState } from 'react';
 
 
 export function CrearCategoriaModal() {
   const [open, setOpen] = React.useState(false);
+  const [error, setError] = useState(null);
+
+  const manejarEnvio = async (event) => {
+    event.preventDefault();
+  
+    const datos = {
+      nombre: event.target.elements.nombreCategoria.value,
+      descripcion: event.target.elements.descripcionCategoria.value,
+      estado: event.target.elements.estadoCategoria.value,
+    };
+    const result = categoriaSchema.safeParse(datos);
+  
+    if (!result.success) {
+      // Accede a los errores de validación y los muestra
+      const errorMessage = Object.values(result.error.formErrors.fieldErrors).join(', ');
+      setError(errorMessage);
+    } else {
+      const data = {
+        nombre: event.target.elements.nombreCategoria.value,
+        descripcion: event.target.elements.descripcionCategoria.value,
+        estado: event.target.elements.estadoCategoria.value,
+      };
+      
+      try {
+        const respuesta = await enviarDatos("http://127.0.0.1:5000/crear_categoria",data);
+        console.log(respuesta.msg); // Imprime el mensaje del servidor por consola
+        console.log(respuesta.estado); 
+        Swal.fire(
+          'Agregado!',
+          'Tu categoria fue agregada.',
+          'success'
+      );
+        setOpen(false);
+      } catch (error) {
+        console.error('Hubo un error:', error);
+      }
+    }
+  
+  };
   return (
     <>
  <Button color="green" onClick={() => setOpen(true)} variant="gradient" className="flex">
@@ -53,6 +62,7 @@ export function CrearCategoriaModal() {
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
         }}
+        
       >
         <DialogBody>
           <div class="relative flex-col text-gray-700 bg-transparent shadow-none rounded-xl bg-clip-border grid justify-items-center">
@@ -67,7 +77,7 @@ export function CrearCategoriaModal() {
                   Nombre categoria
                 </h6>
                 <div class="relative h-11 w-full min-w-[200px]">
-                  <input placeholder="Silicon..." required name="nombreCategoria"
+                  <input placeholder="Silicon..."  name="nombreCategoria"
                     class="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent !border-t-blue-gray-200 bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:!border-t-gray-900 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50" />
                   
                   <label
@@ -78,7 +88,7 @@ export function CrearCategoriaModal() {
                   Descripción de la categoria
                 </h6>
                 <div class="relative h-11 w-full min-w-[200px]">
-                  <input placeholder="Esta categoria hace..." required  name="descripcionCategoria" 
+                  <input placeholder="Esta categoria hace..."   name="descripcionCategoria" 
                     class="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent !border-t-blue-gray-200 bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:!border-t-gray-900 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50" />
                   
                   <label
@@ -89,14 +99,15 @@ export function CrearCategoriaModal() {
                   Estado
                 </h6>
                 <select name="estadoCategoria" id="estadoCategoria" required class="border border-gray-300 rounded px-5 py-2 text-sm focus:">
-              <option value="1">Activo</option>
-              <option value="2">Inactivo</option>
+              <option value="0">Activo</option>
+              <option value="1">Inactivo</option>
             </select>
               
             
               </div>
               <div class="inline-flex items-center">
               </div>
+              {error && <p style={{ color: 'red' }}>{error}</p>}
               <button 
                 class="mt-6 block w-full select-none rounded-lg bg-green-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 type="submit">

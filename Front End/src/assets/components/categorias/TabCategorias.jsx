@@ -17,7 +17,7 @@ import {
 import Swal from 'sweetalert2'
 import { CrearCategoriaModal } from "../categorias/CrearCategoriaModal";
 import { EditarCategoriaModal } from "../categorias/EditarCategoriaModal";
-
+import { anular } from "../servicios/anular";
 import React, { Suspense } from "react";
 import { useFetch } from "../servicios/UseFetch";
 import { fetchData } from "../servicios/fetchData";
@@ -27,8 +27,8 @@ const apiData = fetchData("http://127.0.0.1:5000/consultar_categorias");
 
 
 const TABLE_HEAD = ["Id", "Nombre categoria", "Descripción", "Fecha", "Estado", ""];
-
-const handleClick = async () => {
+const handleClick = async (id_categoria) => {
+    console.log(id_categoria);
     const result = await Swal.fire({
         title: '¿Estás seguro?',
         text: '¡No podrás revertir esto!',
@@ -40,13 +40,21 @@ const handleClick = async () => {
     });
 
     if (result.isConfirmed) {
-        Swal.fire(
-            '¡Borrado!',
-            'Tu archivo ha sido borrado.',
-            'success'
-        );
+        // Aquí es donde haces la solicitud PUT
+        try {
+            const data = await anular('http://127.0.0.1:5000/actualizar_categoria/', id_categoria, null);
+            console.log('Success:', data);
+            Swal.fire(
+                '¡Borrado!',
+                'Tu archivo ha sido borrado.',
+                'success'
+            );
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 };
+
 export function TabCategorias() {
     const data = apiData.read();
     return (
@@ -146,12 +154,14 @@ export function TabCategorias() {
                                     </td>
                                     <td className="p-6">
                                         <div className="flex">
-                                            <EditarCategoriaModal />
+                                        <EditarCategoriaModal id_categoria={id_categoria} />
 
 
-                                            <Button color="red" onClick={handleClick} className="p-3 m-1">
-                                                <TrashIcon className="h-5 w-5" />
-                                            </Button>
+
+                                        <Button id_categoria={id_categoria} color="red" onClick={() => handleClick(id_categoria)} className="p-3 m-1">
+                                        <TrashIcon className="h-5 w-5" />
+                                        </Button>
+
                                         </div>
                                     </td>
                                 </tr>
