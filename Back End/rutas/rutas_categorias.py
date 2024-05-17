@@ -2,6 +2,7 @@ from flask import jsonify,request
 from modelos.categorias import Categorias
 from conexiondb.database import db_session
 from datetime import datetime
+from servicios.mensajes_validaciones import *
 def rutas_categorias(app):
 
     @app.route('/consultar_categorias')
@@ -21,7 +22,7 @@ def rutas_categorias(app):
             json_data = jsonify(categorias)    
             return json_data 
         except:  
-            return jsonify({"msg": "No se encontraron categorias","estado":False})     
+            return jsonify({"msg": mensaje_error_consultar(),"estado":False})     
         
     @app.route('/consultar_categoria/<id_categoria>')
     def consultar_categoria(id_categoria):
@@ -36,7 +37,7 @@ def rutas_categorias(app):
             json_data = jsonify(datos_categoria)    
             return json_data
         except:    
-            return jsonify({"msg": "No se encontro categoria","estado":False})
+            return jsonify({"msg": mensaje_dato_no_encontrado(),"estado":False})
         
         
     @app.route("/crear_categoria",methods=["POST"])    
@@ -44,37 +45,77 @@ def rutas_categorias(app):
         datos = request.json
         nombre = datos.get('nombre')
         descripcion = datos.get('descripcion')
-        estado = datos.get('estado')
+        estado = str(datos.get('estado'))
         fecha_categoria = datetime.now()
-        
-    # Aquí debes agregar el código para guardar 'nueva_categoria' en tu base de datos
 
-        
-        try:
-            crear= Categorias(nombre, descripcion,estado,fecha_categoria)
-            db_session.add(crear)
-            db_session.commit()
-            return jsonify({"msg": "Exito al crear el categoria","estado":True}) 
-        except:    
-            return jsonify({"msg": "No se pudo crear el categoria","estado":False})
+        if nombre == '' or descripcion == '' or estado == None:
+            return jsonify({"msg": campos_vacios(),"estado":False}) 
+        else:   
+            if not estado.isalpha() or int(estado):
+                if int(estado) == 0 or int(estado) == 1:   
+                    try:
+                        crear= Categorias(nombre, descripcion,estado,fecha_categoria)
+                        db_session.add(crear)
+                        db_session.commit()
+                        return jsonify({"msg": mensaje_exito_crear("categoria"),"estado":True}) 
+                    except Exception as e:    
+                        return jsonify({"msg": f"{mensaje_error_crear("categoria")+ ":" +  str(e)}","estado":False})       
+                else:
+                    return jsonify({"msg": mensaje_error_estado(), "estado": False})  
+            else:
+                return jsonify({"msg": mensaje_error_formato(),"estado":False})  
         
     @app.route("/actualizar_categoria/<int:id_categoria>",methods=["PUT"]) 
     def actualizar_categoria(id_categoria):
         datos = request.json
-        try:
-            categoria = Categorias.query.filter_by(id_categoria=id_categoria).first()
-            if categoria:
-                if 'nombre' in datos:
-                    categoria.nombre = datos['nombre']
-                if 'descripcion' in datos:
-                    categoria.descripcion = datos['descripcion']
-                if 'estado' in datos:
-                    categoria.estado = datos['estado']
-                db_session.commit()
-                return jsonify({"msg": "Éxito al actualizar el categoria", "estado": True})
+        nombre = datos.get('nombre')
+        descripcion = datos.get('descripcion')
+        estado = datos.get('estado')
+        if nombre == '' or descripcion == '' or estado == None:
+            return jsonify({"msg": campos_vacios(),"estado":False}) 
+        else:
+            if not estado.isalpha() or int(estado):
+                if int(estado) == 0 or int(estado) == 1:
+                    try:
+                        categoria = Categorias.query.filter_by(id_categoria=id_categoria).first()
+                        if categoria:
+                            categoria.nombre = nombre
+                            categoria.descripcion = descripcion
+                            categoria.estado = estado
+                            db_session.commit()
+                            return jsonify({"msg": mensaje_exito_actualizar("categoria"), "estado": True})
+                        else:
+                            return jsonify({"msg": mensaje_dato_no_encontrado(), "estado": False})
+                    except Exception as e:    
+                        return jsonify({"msg": f"{mensaje_error_crear("categoria")+ ":" + str(e)}", "estado": False})
+                else:
+                    return jsonify({"msg": mensaje_error_estado(), "estado": False})  
             else:
-                return jsonify({"msg": "No se encontró el categoria", "estado": False})
-        except Exception as e:    
-            return jsonify({"msg": f"No se pudo actualizar el categoria: {str(e)}", "estado": False})
+                return jsonify({"msg": mensaje_error_formato(),"estado":False}) 
+
+    @app.route("/desactivar_categoria/<int:id_categoria>",methods=["PUT"]) 
+    def desactivar_categoria(id_categoria):
+        datos = request.json
+        estado = str(datos.get('estado'))
+        if estado == '':
+            return jsonify({"msg": campos_vacios(),"estado":False}) 
+        else:
+            if not estado.isalpha() or int(estado) :
+                if int(estado) == 0 or int(estado) == 1:
+                    try:
+                        categoria = Categorias.query.filter_by(id_categoria=id_categoria).first()
+                        if categoria:
+                            categoria.estado = estado
+                            db_session.commit()
+                            return jsonify({"msg": mensaje_exito_desactivar("categoria"), "estado": True})
+                        else:
+                            return jsonify({"msg": mensaje_dato_no_encontrado(), "estado": False})
+                    except Exception as e:
+                        return jsonify({"msg": f" {mensaje_error_desactivar("categoria")+ ":" +str(e)}", "estado": False}) 
+                else:
+                   return jsonify({"msg": mensaje_error_estado(), "estado": False})      
+            else:
+                return jsonify({"msg": mensaje_error_formato(),"estado":False})      
+                         
 
     

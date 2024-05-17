@@ -37,14 +37,23 @@ export function CrearCategoriaModal() {
         const respuesta = await enviarDatos("http://127.0.0.1:5000/crear_categoria",data);
         console.log(respuesta.msg); // Imprime el mensaje del servidor por consola
         console.log(respuesta.estado); 
-        Swal.fire(
-          'Agregado!',
-          'Tu categoria fue agregada.',
-          'success'
-      );
+        if(respuesta.estado){
+          Swal.fire(
+            'Agregado!',
+            respuesta.msg,
+            'success'
+        );
+        }
+        else{
+          Swal.fire(
+            'Error!',
+            respuesta.msg,
+            'error'
+        );
+        }
         setOpen(false);
       } catch (error) {
-        console.error('Hubo un error:', error);
+        console.log(error);
       }
     }
   
@@ -52,8 +61,8 @@ export function CrearCategoriaModal() {
   return (
     <>
  <Button color="green" onClick={() => setOpen(true)} variant="gradient" className="flex">
-        <UserPlusIcon strokeWidth={2} className="h-4 w-4" />
-        <span className="px-2">Crear nueva categoria</span>
+        
+        <span className="px-2">Nueva categoria</span>
       </Button>
       <Dialog
         open={open}
@@ -99,8 +108,8 @@ export function CrearCategoriaModal() {
                   Estado
                 </h6>
                 <select name="estadoCategoria" id="estadoCategoria" required class="border border-gray-300 rounded px-5 py-2 text-sm focus:">
-              <option value="0">Activo</option>
-              <option value="1">Inactivo</option>
+              <option value="1">Activo</option>
+              <option value="0">Inactivo</option>
             </select>
               
             

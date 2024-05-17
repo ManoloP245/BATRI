@@ -9,6 +9,7 @@ import {
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { editar } from "../servicios/editar";
 import { useState, useEffect } from "react";
+import Swal from 'sweetalert2';
 import { categoriaSchema } from "./CategoriasValidaciones";
 export function EditarCategoriaModal({ id_categoria }) {
   const [open, setOpen] = React.useState(false);
@@ -45,16 +46,26 @@ export function EditarCategoriaModal({ id_categoria }) {
     }
 
     try {
-      const respuesta = await editar('http://127.0.0.1:5000/actualizar_categoria/', data, id_categoria);
-      Swal.fire(
-        'Agregado!',
-        'Tu categoria fue actualizada.',
-        'success'
-    );
-      console.log('Categoría actualizada con éxito');
+      const respuesta = await editar("http://127.0.0.1:5000/actualizar_categoria/",data,id_categoria);
+      console.log(respuesta.msg); // Imprime el mensaje del servidor por consola
+      console.log(respuesta.estado); 
+      if(respuesta.estado){
+        Swal.fire(
+          'Agregado!',
+          respuesta.msg,
+          'success'
+      );
+      }
+      else{
+        Swal.fire(
+          'Error!',
+          respuesta.msg,
+          'error'
+      );
+      }
       setOpen(false);
     } catch (error) {
-      console.error('Hubo un error:', error);
+      console.log(error);
     }
   };
 

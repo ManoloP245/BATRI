@@ -1,5 +1,5 @@
-export const editar = async (urlBase, data, id_categoria) => {
-  const url = `${urlBase}${id_categoria}`;
+export const editar = async (urlBase, data, id) => {
+  const url = `${urlBase}${id}`;
   try {
     const respuesta = await fetch(url, {
       method: 'PUT',

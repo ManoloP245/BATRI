@@ -1,5 +1,5 @@
-export const anular = (urlBase, id_categoria) => {
-    const url = `${urlBase}${id_categoria}`;
+export const anular = (urlBase, id) => {
+    const url = `${urlBase}${id}`;
     return fetch(url, {
         method: 'PUT',
         headers: {
